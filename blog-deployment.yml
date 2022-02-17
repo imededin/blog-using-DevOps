@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: blog-app
+   labels:
+      app: blog-app 
+spec:
+   selector:
+      matchLabels:
+         app: blog-app
+    template:
+       metadata:
+          name: blog-app
+          labels:
+             app: blog-app
+          spec:
+             containers:
+               - name: blog-app
+                 image: imed1/blog-app
+                 ports:
+                   - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: blog-service
+spec:
+   selector:
+      app: blog-app
+   ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8000
+      
+
+
+   
+               

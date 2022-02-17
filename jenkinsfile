@@ -1,0 +1,36 @@
+pipeline{
+    environment{
+        dockerimagename="imed1/blog-app"
+        dockerImage=""
+    }
+    agent any
+    stages{
+        stage('checkoutsource'){
+            steps{
+                git 'https://github.com/imededin/blog-using-DevOps.git'
+            }
+        }
+        stage('build'){
+            steps{
+                script{
+                    dockerImage= docker.build dockerimagename
+                }
+            }
+
+        }
+        stage("push"){
+
+            environment{
+                registryCredential='dockerc'
+            }
+            steps{
+                script{
+                    docker.withRegistry('https://registry.hub.docker.com/',registryCredential){
+                        dockerImage.push("latest")
+                    }
+                }
+            }
+        }
+        
+    }
+}
